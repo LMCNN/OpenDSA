@@ -1,12 +1,15 @@
-(function ($) {
+(function ($)
+{
 	var problems = [],
-			haveGraph = false,
-			testCaseNumbers = {1: 1}, //problem -> number of test cases
-			problemCount = 1,
-			resultCount = 1,
-			editGraphButtons = [];
+		haveGraph = false,
+		testCaseNumbers = {1: 1}, //problem -> number of test cases
+		problemCount = 1,
+		resultCount = 1,
+		editGraphButtons = [],
+		uploadGraphButtons = [];
 
-	function generatejson() {
+	function generatejson()
+	{
 		problems = [];
 		$("fieldset").each(problemInfo);
 		var json = JSON.stringify(problems);
@@ -23,10 +26,10 @@
 	
 	function problemInfo() {
 		var problem = {
-    	expression: "",
+			expression: "",
 			description: "",
 			type: "",
-    	testCases: [],
+			testCases: [],
 			graph: ""
 		};
 		var index = $(this).index();
@@ -37,7 +40,8 @@
 		problem.expression = $(this).find("input[name='expression']")[0].value;
 		problem.description = $(this).find("input[name='description']")[0].value;
 
-		$(this).find(".testCase").each(function() {
+		$(this).find(".testCase").each(function()
+		{
 			var _case = {},
 					testString = $(this).find("input[name='testString']")[0].value,
 					resultButtons = $(this).find("input[type='radio']");
@@ -49,9 +53,11 @@
 		problems.push(problem);
 	}
 
-	function addProblem() {
+	function addProblem()
+	{
 		problemCount++;
 		resultCount++;
+
 		$("#problems").append(""+
 			"<fieldset id='" + problemCount + "'>" + 
 				"<legend>Problem " + problemCount + "</legend>" + 
@@ -73,20 +79,37 @@
 					"</div>"+
 					"</div>"+
 			"</fieldset>");
+
 		var addCaseButton = $("<button type='button' id='addTestCase'>Add another test case</button>");
 		addCaseButton.click(addCase);
 		$("fieldset[id='" + problemCount + "']").append(addCaseButton);
+
 		var editGraphButton = $("<button type='button' id='editGraph'>Edit Graph</button>");
 		editGraphButton.click(editGraph);
 		$("fieldset[id='" + problemCount + "']").append(editGraphButton);
+
+		var uploadGraphButton = $("<button type='button' id='uploadGraph'>Upload Graph</button>");
+		uploadGraphButton.click(uploadGraph);
+		$("fieldset[id='" + problemCount + "']").append(uploadGraphButton);
+
 		testCaseNumbers[problemCount] = 1;
 		localStorage['problem' + (problemCount - 1)] = '{"nodes":[], "edges": []}';
-		if (haveGraph) editGraphButton.show();
-		else editGraphButton.hide();
+
+		if (haveGraph) {
+			editGraphButton.show();
+			uploadGraphButton.show();
+		}
+		else {
+			editGraphButton.hide();
+			uploadGraphButton.hide();
+		}
+
 		editGraphButtons.push(editGraphButton);
+		uploadGraphButtons.push(uploadGraphButton);
 	}
 
-	function addCase() {
+	function addCase()
+	{
 		var button = $(this);
 		var thisProblem = button.parent();
 		var testCases = button.parent().find(".testCases");
@@ -94,6 +117,7 @@
 		testCaseNumbers[index]++;
 		caseCount = testCaseNumbers[index];
 		resultCount++;
+
 		testCases.append("" +
 			"<div class='testCase'>"+
 				"<span>Test Case " + caseCount + ": </span>"+
@@ -112,21 +136,142 @@
 		localStorage['exerciseIndex'] = problemIndex;
 		window.open("../ui/FAEditor.html");
 	}
+
+
+
+	function uploadGraph() {
+		var uploadButton = $(this);
+		var problemIndex = uploadButton.parent().index();
+		//let FAEditor know we are editing graphs for exercises so we don't need certain functions.
+		localStorage['createExercise'] = true;
+		localStorage['exerciseIndex'] = problemIndex;
+		// console.log('PROBLEM INDEX: ' + problemIndex);
+
+		document.getElementById('upload').click();
+	}
+	//parse function copy from FAEditor
+	function parseFile(text) {
+		var parser,
+			jsav = new JSAV("av"),
+			g,
+			xmlDoc;
+		if (window.DOMParser) {
+			parser = new DOMParser();
+			xmlDoc = parser.parseFromString(text,"text/xml");
+		}
+		else {
+			xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+			xmlDoc.async = false;
+			xmlDoc.loadXML(txt);
+		}
+		if (!xmlDoc.getElementsByTagName("type")[0]) {
+			// This file is not a file that can be parsed.
+			window.alert('File does not contain an automaton.');
+			return;
+		}
+		if (xmlDoc.getElementsByTagName("type")[0].childNodes[0].nodeValue !== 'fa') {
+			// This file was created by a different automaton editor.
+			window.alert('File does not contain a finite automaton.');
+			return;
+		}
+		else {
+			g = new jsav.ds.fa({width: '730px', height: 440, layout: "automatic", editable: true});
+			var nodeMap = {};			// map node IDs to nodes
+			var xmlStates = xmlDoc.getElementsByTagName("state");
+			xmlStates = _.sortBy(xmlStates, function(x) { return x.id; })
+			var xmlTrans = xmlDoc.getElementsByTagName("transition");
+			// Iterate over the nodes and initialize them.
+			for (var i = 0; i < xmlStates.length; i++) {
+				var x = Number(xmlStates[i].getElementsByTagName("x")[0].childNodes[0].nodeValue);
+				var y = Number(xmlStates[i].getElementsByTagName("y")[0].childNodes[0].nodeValue);
+				// console.log('x = ' + x);
+				// console.log('y = ' + y);
+				var newNode = g.addNode({left: x, top: y});
+				// console.log(newNode.position().left);
+				// console.log(newNode.position().top);
+				// Add the various details, including initial/final states and state labels.
+				var isInitial = xmlStates[i].getElementsByTagName("initial")[0];
+				var isFinal = xmlStates[i].getElementsByTagName("final")[0];
+				var isLabel = xmlStates[i].getElementsByTagName("label")[0];
+				if (isInitial) {
+					g.makeInitial(newNode);
+				}
+				if (isFinal) {
+					newNode.addClass('final');
+				}
+				if (isLabel) {
+					newNode.stateLabel(isLabel.childNodes[0].nodeValue);
+				}
+				nodeMap[xmlStates[i].id] = newNode;
+				newNode.stateLabelPositionUpdate();
+			}
+			// Iterate over the edges and initialize them.
+			for (var i = 0; i < xmlTrans.length; i++) {
+				var from = xmlTrans[i].getElementsByTagName("from")[0].childNodes[0].nodeValue;
+				var to = xmlTrans[i].getElementsByTagName("to")[0].childNodes[0].nodeValue;
+				var read = xmlTrans[i].getElementsByTagName("read")[0].childNodes[0];
+				// Empty string always needs to be checked for.
+				if (!read) {
+					read = emptystring;
+				}
+				else {
+					read = read.nodeValue;
+				}
+				var edge = g.addEdge(nodeMap[from], nodeMap[to], {weight: read});
+				edge.layout();
+			}
+		}
+		return serialize(g);
+	}
+
+	function loadGraph() {
+		var loaded = document.getElementById('upload');
+		var file = loaded.files[0],
+			reader = new FileReader();
+		reader.onload = function (ev) {
+			var text = reader.result;
+			// console.log('The input JFLAP file: ');
+			// console.log(text);
+			// console.log('The output JSON file: ');
+			var resultJson = parseFile(text);
+			// console.log(resultJson);
+
+			var uploadButton = $(this);
+			var problemIndex = uploadButton.parent().index();
+			// console.log('problem index: ' + localStorage['exerciseIndex']);
+			localStorage['problem' + localStorage['exerciseIndex']] = resultJson;
+		}
+		reader.readAsText(file);
+		alert('Graph loaded!');
+	}
 		
-	$('input:radio[name="mode"]').change(function() {
-  	if ($(this).val() == 'noGraph') {
-    	$("#editGraph").hide();
+	$('input:radio[name="mode"]').change(function()
+	{
+		if ($(this).val() == 'noGraph')
+		{
+			$("#editGraph").hide();
 			editGraphButtons.forEach(function(button) {
 				button.hide();
 			});
+
+			$("#uploadGraph").hide();
+			uploadGraphButtons.forEach(function(button) {
+				button.hide();
+			});
 			haveGraph = false;
-  	} else {
-    	$("#editGraph").show();
+		}
+		else {
+			$("#editGraph").show();
 			editGraphButtons.forEach(function(button) {
 				button.show();
 			});
+
+			$("#uploadGraph").show();
+			uploadGraphButtons.forEach(function(button) {
+				button.show();
+			});
 			haveGraph = true;
-  	}
+		}
 	});
 
 	$("#getjson").click(generatejson);
@@ -134,5 +279,9 @@
 	$("#addTestCase").click(addCase);
 	$("#editGraph").click(editGraph);
 	$("#editGraph").hide();
+
+	$("#uploadGraph").click(uploadGraph);
+	$("#uploadGraph").hide();
+	$("#upload").change(loadGraph);
 	localStorage['problem0'] = '{"nodes":[],"edges":[]}';
 }(jQuery));

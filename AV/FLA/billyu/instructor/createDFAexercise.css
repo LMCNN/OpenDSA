@@ -112,7 +112,7 @@ button:hover
 h1 {
 	text-align: center;
 }
-#addTestCase, #editGraph {
+#addTestCase, #editGraph, #uploadGraph {
 	width: 50%;
 	padding: 10px;
 }
@@ -144,4 +144,9 @@ form {
 }
 .dropdown-content > p {
 	margin: 10px 10px;
+}
+
+#av {
+    width: 500px;
+    height: 500px;
 }
