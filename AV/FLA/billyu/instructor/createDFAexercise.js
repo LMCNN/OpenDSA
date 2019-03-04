@@ -278,10 +278,10 @@
 	$("#addExercise").click(addProblem);
 	$("#addTestCase").click(addCase);
 	$("#editGraph").click(editGraph);
-	$("#editGraph").hide();
+//	$("#editGraph").hide();
 
 	$("#uploadGraph").click(uploadGraph);
-	$("#uploadGraph").hide();
+//	$("#uploadGraph").hide();
 	$("#upload").change(loadGraph);
 	localStorage['problem0'] = '{"nodes":[],"edges":[]}';
 }(jQuery));
