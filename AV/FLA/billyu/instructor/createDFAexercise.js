@@ -230,11 +230,11 @@
 			reader = new FileReader();
 		reader.onload = function (ev) {
 			var text = reader.result;
-			// console.log('The input JFLAP file: ');
-			// console.log(text);
-			// console.log('The output JSON file: ');
+			console.log('The input JFLAP file: ');
+			console.log(text);
+			console.log('The output JSON file: ');
 			var resultJson = parseFile(text);
-			// console.log(resultJson);
+			console.log(resultJson);
 
 			var uploadButton = $(this);
 			var problemIndex = uploadButton.parent().index();
