@@ -137,13 +137,15 @@
 		window.open("../ui/FAEditor.html");
 	}
 
-	//test
-	function testButton() {
+	//Open the FAFix page
+	function fixerButton() {
 		window.open("../ui/FAFixer.html");
-
 	}
 
-
+	//Open the FATester page
+	function testerButton() {
+		window.open("../ui/FATester.html");
+	}
 
 	function uploadGraph() {
 		var uploadButton = $(this);
@@ -285,7 +287,8 @@
 	$("#addTestCase").click(addCase);
 	$("#editGraph").click(editGraph);
 	//test
-	$("#testButton").click(testButton);
+	$("#fixerButton").click(fixerButton);
+	$("#testerButton").click(testerButton);
 
 //	$("#editGraph").hide();
 
