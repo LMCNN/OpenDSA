@@ -137,6 +137,12 @@
 		window.open("../ui/FAEditor.html");
 	}
 
+	//test
+	function testButton() {
+		window.open("../ui/FAFixer.html");
+
+	}
+
 
 
 	function uploadGraph() {
@@ -278,10 +284,13 @@
 	$("#addExercise").click(addProblem);
 	$("#addTestCase").click(addCase);
 	$("#editGraph").click(editGraph);
-	$("#editGraph").hide();
+	//test
+	$("#testButton").click(testButton);
+
+//	$("#editGraph").hide();
 
 	$("#uploadGraph").click(uploadGraph);
-	$("#uploadGraph").hide();
+//	$("#uploadGraph").hide();
 	$("#upload").change(loadGraph);
 	localStorage['problem0'] = '{"nodes":[],"edges":[]}';
 }(jQuery));
