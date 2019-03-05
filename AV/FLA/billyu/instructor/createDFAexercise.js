@@ -266,6 +266,9 @@
 			uploadGraphButtons.forEach(function(button) {
 				button.hide();
 			});
+
+			$("#fixerButton").hide();
+			$("#testerButton").show();
 			haveGraph = false;
 		}
 		else {
@@ -278,6 +281,9 @@
 			uploadGraphButtons.forEach(function(button) {
 				button.show();
 			});
+
+			$("#fixerButton").show();
+			$("#testerButton").hide();
 			haveGraph = true;
 		}
 	});
@@ -286,14 +292,16 @@
 	$("#addExercise").click(addProblem);
 	$("#addTestCase").click(addCase);
 	$("#editGraph").click(editGraph);
-	//test
+
+	//Test button for FAFixer and FATester
+	$("#fixerButton").hide();
 	$("#fixerButton").click(fixerButton);
 	$("#testerButton").click(testerButton);
 
-//	$("#editGraph").hide();
+	$("#editGraph").hide();
 
 	$("#uploadGraph").click(uploadGraph);
-//	$("#uploadGraph").hide();
+	$("#uploadGraph").hide();
 	$("#upload").change(loadGraph);
 	localStorage['problem0'] = '{"nodes":[],"edges":[]}';
 }(jQuery));
