@@ -137,6 +137,12 @@
 		window.open("../ui/FAEditor.html");
 	}
 
+	//test
+	function testButton() {
+		window.open("../ui/FAFixer.html");
+
+	}
+
 
 
 	function uploadGraph() {
@@ -278,6 +284,9 @@
 	$("#addExercise").click(addProblem);
 	$("#addTestCase").click(addCase);
 	$("#editGraph").click(editGraph);
+	//test
+	$("#testButton").click(testButton);
+
 //	$("#editGraph").hide();
 
 	$("#uploadGraph").click(uploadGraph);
