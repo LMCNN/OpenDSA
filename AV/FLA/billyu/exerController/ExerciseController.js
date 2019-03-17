@@ -1,32 +1,55 @@
-var ExerciseController = function (jsav, fa, filePath, dataType, options) {
-	this.init(jsav, fa, filePath, dataType, options);
+var ExerciseController = function (jsav, fa, filePath, dataType, options, check) {
+	this.init(jsav, fa, filePath, dataType, options, check);
 };
 var controllerProto = ExerciseController.prototype;
 
-controllerProto.init = function (jsav, fa, filePath, dataType, options) {
+controllerProto.init = function (jsav, fa, filePath, dataType, options, check) {
+	// alert(check);
+	if (check) {
+		this.tests = JSON.parse(localStorage['json']);
+	}
+	else {
+		this.filePath = filePath;
+		this.dataType = dataType;
+		this.tests;
+	}
 	this.jsav = jsav;
 	this.fa = fa;
-	this.filePath = filePath;
-	this.dataType = dataType;
-	this.tests;
+	// this.filePath = filePath;
+	// this.dataType = dataType;
+	// this.tests;
 	this.currentExercise = 0;
 	this.testCases;
 	this.initGraph = options.initGraph;
 }
 
-controllerProto.load = function () {
-	var filePath = this.filePath;
-	var dataType = this.dataType;
-	var tests;
-	$.ajax({
-		url: filePath,
-		dataType: dataType,
-		async: false,
-		success: function(data) {
-			tests = data;
-		}
-	});
-	this.tests = tests;
+controllerProto.load = function (check) {
+	if (!check ) {
+		var filePath = this.filePath;
+		var dataType = this.dataType;
+		var tests;
+		$.ajax({
+			url: filePath,
+			dataType: dataType,
+			async: false,
+			success: function (data) {
+				tests = data;
+			}
+		});
+		this.tests = tests;
+	}
+	// var filePath = this.filePath;
+	// var dataType = this.dataType;
+	// var tests;
+	// $.ajax({
+	// 	url: filePath,
+	// 	dataType: dataType,
+	// 	async: false,
+	// 	success: function(data) {
+	// 		tests = data;
+	// 	}
+	// });
+	// this.tests = tests;
 	for (i = 0; i < this.tests.length; i++) {
 		$("#exerciseLinks").append("<a href='#' id='" + i + "' class='links'>" + (i+1) + "</a>");
 	}

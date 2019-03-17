@@ -139,11 +139,21 @@
 
 	//Open the FAFix page
 	function fixerButton() {
+		problems = [];
+		$("fieldset").each(problemInfo);
+		var json = JSON.stringify(problems);
+		localStorage['json'] = json;
+		window.buttonid = document.getElementById('fixerButton');
 		window.open("../ui/FAFixer.html");
 	}
 
 	//Open the FATester page
 	function testerButton() {
+		problems = [];
+		$("fieldset").each(problemInfo);
+		var json = JSON.stringify(problems);
+		localStorage['json'] = json;
+		window.buttonid = document.getElementById('testerButton');
 		window.open("../ui/FATester.html");
 	}
 

@@ -21,14 +21,24 @@ var latexit = "http://latex.codecogs.com/svg.latex?";
 		// initialize right click menu and hide it for future use
 		type = $('h1').attr('id');
 		if (type == 'fixer' || type == 'tester') {
+			var check;
+			try{
+				check = opener.buttonid;
+			}
+			catch(err){
+				check = false;
+			}
+			// var check = window.opener.buttonid;
 			switch (type) {
 			case 'fixer':
-				exerController = new ExerciseController(jsav, g, "../exercises/fixerTests.json", "json", {initGraph: initGraph});
-				exerController.load();
+				alert(check);
+				exerController = new ExerciseController(jsav, g, "../exercises/fixerTests.json", "json", {initGraph: initGraph}, check);
+				exerController.load(check);
 				break;
 			case 'tester':
-				exerController = new ExerciseController(jsav, g, "../exercises/FAwithExpression.json", "json", {initGraph: initGraph});
-				exerController.load();
+				alert(check);
+				exerController = new ExerciseController(jsav, g, "../exercises/FAwithExpression.json", "json", {initGraph: initGraph}, check);
+				exerController.load(check);
 				break;
 			default:
 				break;
