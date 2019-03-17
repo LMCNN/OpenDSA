@@ -31,12 +31,12 @@ var latexit = "http://latex.codecogs.com/svg.latex?";
 			// var check = window.opener.buttonid;
 			switch (type) {
 			case 'fixer':
-				alert(check);
+				// alert(check);
 				exerController = new ExerciseController(jsav, g, "../exercises/fixerTests.json", "json", {initGraph: initGraph}, check);
 				exerController.load(check);
 				break;
 			case 'tester':
-				alert(check);
+				// alert(check);
 				exerController = new ExerciseController(jsav, g, "../exercises/FAwithExpression.json", "json", {initGraph: initGraph}, check);
 				exerController.load(check);
 				break;
