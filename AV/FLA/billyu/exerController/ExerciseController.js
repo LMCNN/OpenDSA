@@ -2,7 +2,9 @@ var ExerciseController = function (jsav, fa, filePath, dataType, options, check)
 	this.init(jsav, fa, filePath, dataType, options, check);
 };
 var controllerProto = ExerciseController.prototype;
-
+var logRecord = new Object();
+logRecord['HighestScore'] = 0;
+var tryC = 0;
 controllerProto.init = function (jsav, fa, filePath, dataType, options, check) {
 	if (check) {
 		this.tests = JSON.parse(localStorage['json']);
@@ -50,6 +52,7 @@ controllerProto.load = function (check) {
 }
 
 controllerProto.startTesting = function() {
+	tryC++;
 	if (this.fa.initial == null) {
 		window.alert("FA traversal requires an initial state.");
 		return;
@@ -69,6 +72,15 @@ controllerProto.startTesting = function() {
 			$("#testResults").append("<tr><td>" + input + "</td><td>" + (testCase[input] ? "Accept" : "Reject") + "</td><td class='wrong'>" + (inputResult ? "Reject": "Accept") + "</td></tr>");
 		}
 	}
+	var exer = {};
+	exer['Attempt' + tryC.toString()] = count + " / " + this.testCases.length;
+	var num = (this.currentExercise).toString();
+	logRecord['Exercise' + (num + 1).toString()] = exer;
+	if (count > logRecord['HighestScore']) {
+		logRecord['HighestScore'] = count;
+	}
+	alert(JSON.stringify(logRecord));
+	//alert(this.currentExercise);
 	$("#percentage").text("Correct cases: " + count + " / " + this.testCases.length);
 	$("#percentage").show();
 	$("#testResults").show();
