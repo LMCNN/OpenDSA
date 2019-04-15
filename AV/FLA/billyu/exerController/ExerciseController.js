@@ -62,11 +62,19 @@ controllerProto.startTesting = function() {
 		var input = Object.keys(testCase)[0];
 		var inputResult = willReject(this.fa, input);
 		if (inputResult !== testCase[input]) {
+<<<<<<< HEAD
 			$("#testResults").append("<tr><td>" + input + "</td><td>" + (testCase[input] ? "Accept" : "Reject") + "</td><td class='correct'>" + (inputResult ? "Reject": "Accept") + "</td></tr>");
 			count++;
 		}
 		else {
 			$("#testResults").append("<tr><td>" + input + "</td><td>" + (testCase[input] ? "Accept" : "Reject") + "</td><td class='wrong'>" + (inputResult ? "Reject": "Accept") + "</td></tr>");
+=======
+			$("#testResults").append("<tr><td>" + input + "</td><td>" + (testCase[input] ? "Accept" : "Reject") + "</td><td class='correct'>" + (!inputResult ? "Accept" : "Reject") + "</td></tr>");
+			count++;
+		}
+		else {
+			$("#testResults").append("<tr><td>" + input + "</td><td>" + (testCase[input] ? "Accept" : "Reject") + "</td><td class='wrong'>" + (!inputResult ? "Accept" : "Reject") + "</td></tr>");
+>>>>>>> c9c1671d4ff2926eb1e9621e2dec811d1435968e
 		}
 	}
 	$("#percentage").text("Correct cases: " + count + " / " + this.testCases.length);
