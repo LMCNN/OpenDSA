@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>DFA exercise Editor</title>
+		<title>exercise Editor</title>
 		<link rel="stylesheet" href="./createDFAexercise.css" type="text/css" />
 	</head>
 	<body>
 		<div id="container">
-		<h1>DFA Exercise Generator</h1>
-		<input type="radio" name="mode" value="noGraph" checked>Expression Only
-		<input type="radio" name="mode" value="yesGraph">With Wrong Graph
+		<h1>Exercise Generator</h1>
+
 		<div class="dropdown">
   		<button class="dropbtn">Hint</button>
   		<div class="dropdown-content">
@@ -19,7 +18,14 @@
 			<div id="problems">
 			<fieldset>
 				<legend>Problem 1</legend>
-
+				<div>
+				<input type="radio" name="mode" value="noGraph" checked>Expression Only
+				<input type="radio" name="mode" value="yesGraph">With Wrong Graph
+				</div>
+				<div>
+					<input type = "radio" name = "mode2" value = "pda" checked> PDA
+					<input type = "radio" name = "mode2" value = "fa"> FA
+				</div>
 				<input type="radio" name="show1" value="true" checked>
 				<span>Expression: </span>
 				<input type="text" name="expression">

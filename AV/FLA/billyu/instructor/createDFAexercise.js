@@ -2,6 +2,7 @@
 {
 	var problems = [],
 		haveGraph = false,
+		isFA = true,
 		testCaseNumbers = {1: 1}, //problem -> number of test cases
 		problemCount = 1,
 		resultCount = 1,
@@ -20,6 +21,8 @@
 		} else {
 			fileName = "tests.json";
 		}
+
+		$("#btn-save")
 		$('#download').html('<a href="data:' + downloadData + '" target="_blank" download="' + fileName + '">Download Exercises JSON File</a>');
 		$('#download').click();
 	}
@@ -60,7 +63,9 @@
 
 		$("#problems").append(""+
 			"<fieldset id='" + problemCount + "'>" + 
-				"<legend>Problem " + problemCount + "</legend>" + 
+				"<legend>Problem " + problemCount + "</legend>" +
+					"<div><input type='radio' name='mode' value='noGraph' checked>Expression Only" +
+			"<input type='radio' name='mode' value='yesGraph'>With Wrong Graph</div>" +
 					"<input type='radio' name='show" + problemCount + "' value='true' checked>" + 
 					"<span>Expression: </span>" + 
 					"<input type='text' name='expression'>" + 
@@ -134,7 +139,15 @@
 		//let FAEditor know we are editing graphs for exercises so we don't need certain functions.
 		localStorage['createExercise'] = true;
 		localStorage['exerciseIndex'] = problemIndex;
-		window.open("../ui/FAEditor.html");
+		if (isFA)
+		{
+			window.open("../ui/FAEditor.html");
+		}
+		else
+		{
+			window.open("../ui/NPDAEditor.html");
+		}
+
 	}
 
 	//Open the FAFix page
@@ -295,6 +308,18 @@
 			$("#fixerButton").show();
 			$("#testerButton").hide();
 			haveGraph = true;
+		}
+	});
+
+	$('input:radio[name="mode2"]').change(function()
+	{
+		if ($(this).val() == 'pda')
+		{
+
+			isFA = false;
+		}
+		else {
+			isFA = true;
 		}
 	});
 

@@ -1,5 +1,5 @@
-#Upload Button:
+# Upload Button:
 Upload a JFLAP file then parse it and convert to json file
-#FAFixer Button:
+# FAFixer Button:
 
-#FATester Button:
+# FATester Button:

@@ -4,7 +4,6 @@ var ExerciseController = function (jsav, fa, filePath, dataType, options, check)
 var controllerProto = ExerciseController.prototype;
 
 controllerProto.init = function (jsav, fa, filePath, dataType, options, check) {
-	// alert(check);
 	if (check) {
 		this.tests = JSON.parse(localStorage['json']);
 	}
@@ -15,9 +14,6 @@ controllerProto.init = function (jsav, fa, filePath, dataType, options, check) {
 	}
 	this.jsav = jsav;
 	this.fa = fa;
-	// this.filePath = filePath;
-	// this.dataType = dataType;
-	// this.tests;
 	this.currentExercise = 0;
 	this.testCases;
 	this.initGraph = options.initGraph;
@@ -38,18 +34,7 @@ controllerProto.load = function (check) {
 		});
 		this.tests = tests;
 	}
-	// var filePath = this.filePath;
-	// var dataType = this.dataType;
-	// var tests;
-	// $.ajax({
-	// 	url: filePath,
-	// 	dataType: dataType,
-	// 	async: false,
-	// 	success: function(data) {
-	// 		tests = data;
-	// 	}
-	// });
-	// this.tests = tests;
+
 	for (i = 0; i < this.tests.length; i++) {
 		$("#exerciseLinks").append("<a href='#' id='" + i + "' class='links'>" + (i+1) + "</a>");
 	}
@@ -77,11 +62,11 @@ controllerProto.startTesting = function() {
 		var input = Object.keys(testCase)[0];
 		var inputResult = willReject(this.fa, input);
 		if (inputResult !== testCase[input]) {
-			$("#testResults").append("<tr><td>" + input + "</td><td>" + (testCase[input] ? "Accept" : "Reject") + "</td><td class='correct'>" + (inputResult ? "Accept": "Reject") + "</td></tr>");
+			$("#testResults").append("<tr><td>" + input + "</td><td>" + (testCase[input] ? "Accept" : "Reject") + "</td><td class='correct'>" + (inputResult ? "Reject": "Accept") + "</td></tr>");
 			count++;
 		}
 		else {
-			$("#testResults").append("<tr><td>" + input + "</td><td>" + (testCase[input] ? "Accept" : "Reject") + "</td><td class='wrong'>" + (inputResult ? "Accept": "Reject") + "</td></tr>");
+			$("#testResults").append("<tr><td>" + input + "</td><td>" + (testCase[input] ? "Accept" : "Reject") + "</td><td class='wrong'>" + (inputResult ? "Reject": "Accept") + "</td></tr>");
 		}
 	}
 	$("#percentage").text("Correct cases: " + count + " / " + this.testCases.length);
