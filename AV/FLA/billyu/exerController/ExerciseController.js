@@ -4,15 +4,10 @@ var ExerciseController = function (jsav, fa, filePath, dataType, options, check)
 var controllerProto = ExerciseController.prototype;
 var logRecord = new Object();
 var tryC = 0;
-controllerProto.init = function (jsav, fa, filePath, dataType, options, check) {
-	if (check) {
-		this.tests = JSON.parse(localStorage['json']);
-	}
-	else {
-		this.filePath = filePath;
-		this.dataType = dataType;
-		this.tests;
-	}
+controllerProto.init = function (jsav, fa, filePath, dataType, options) {
+	this.filePath = filePath;
+	this.dataType = dataType;
+	this.tests;
 	this.jsav = jsav;
 	this.fa = fa;
 	this.currentExercise = 0;
@@ -20,21 +15,19 @@ controllerProto.init = function (jsav, fa, filePath, dataType, options, check) {
 	this.initGraph = options.initGraph;
 }
 
-controllerProto.load = function (check) {
-	if (!check ) {
-		var filePath = this.filePath;
-		var dataType = this.dataType;
-		var tests;
-		$.ajax({
-			url: filePath,
-			dataType: dataType,
-			async: false,
-			success: function (data) {
-				tests = data;
-			}
-		});
-		this.tests = tests;
-	}
+controllerProto.load = function () {
+	var filePath = this.filePath;
+	var dataType = this.dataType;
+	var tests;
+	$.ajax({
+		url: filePath,
+		dataType: dataType,
+		async: false,
+		success: function (data) {
+			tests = data;
+		}
+	});
+	this.tests = tests;
 
 	for (i = 0; i < this.tests.length; i++) {
 		$("#exerciseLinks").append("<a href='#' id='" + i + "' class='links'>" + (i+1) + "</a>");

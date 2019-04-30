@@ -12,31 +12,38 @@ var latexit = "http://latex.codecogs.com/svg.latex?";
 		exerciseIndex,//for creating exercises
 		type,//type of editor: fixer, tester or editor
 		fatoreController,
+		createExercise,
 		exerController;
 
 	// Handler for initializing graph upon loading the web page.
 	// Loads the graph from conversionExercise.html / minimizationTest.html if we are navigating here from those pages.
 	// Otherwise simply initializes a default data set.
 	function onLoadHandler() {
+		// Determines whether the finish button is displayed
+		try {
+			if (window.opener.document.title == "Exercise Editor"){
+				createExercise = true;
+				console.log("Is from Editor");
+			}
+		}
+		catch (e) {
+			console.log("Open with itself");
+			createExercise = false;
+		}
+
+		console.log("createExercise = " + createExercise);
+
 		// initialize right click menu and hide it for future use
 		type = $('h1').attr('id');
 		if (type == 'fixer' || type == 'tester') {
-			var check;
-			try{
-				check = opener.buttonid;
-			}
-			catch(err){
-				check = false;
-			}
-			// var check = window.opener.buttonid;
 			switch (type) {
 			case 'fixer':
-				exerController = new ExerciseController(jsav, g, "../exercises/fixerTests.json", "json", {initGraph: initGraph}, check);
-				exerController.load(check);
+				exerController = new ExerciseController(jsav, g, "../exercises/fixerTests.json", "json", {initGraph: initGraph});
+				exerController.load();
 				break;
 			case 'tester':
-				exerController = new ExerciseController(jsav, g, "../exercises/FAwithExpression.json", "json", {initGraph: initGraph}, check);
-				exerController.load(check);
+				exerController = new ExerciseController(jsav, g, "../exercises/FAwithExpression.json", "json", {initGraph: initGraph});
+				exerController.load();
 				break;
 			default:
 				break;
@@ -46,7 +53,8 @@ var latexit = "http://latex.codecogs.com/svg.latex?";
 			$('#begin').click(displayTraversals);
 			var data;
 			//this editor is opened from exercise generator
-			if (localStorage['createExercise'] == 'true') {
+			//if (localStorage['createExercise'] == 'true') {
+			if (createExercise == true) {
 				jsav.umsg("When you're done, click 'finish'.");
 				// exercise generator does not need the functionality buttons
 				$(".functionality").hide();

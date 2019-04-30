@@ -2,7 +2,7 @@
 {
 	var problems = [],
 		haveGraph = false,
-		type = "pad",
+		graphType = "fa",
 		testCaseNumbers = {1: 1}, //problem -> number of test cases
 		problemCount = 1,
 		resultCount = 1,
@@ -138,19 +138,20 @@
 		var editButton = $(this);
 		var problemIndex = editButton.parent().index();
 		//let FAEditor know we are editing graphs for exercises so we don't need certain functions.
-		localStorage['createExercise'] = true;
+		//localStorage['createExercise'] = true;
 		localStorage['exerciseIndex'] = problemIndex;
-		if (isFA == "fa")
+		localStorage['fromEditor'] = true;
+		if (graphType == "fa")
 		{
 			window.open("../ui/FAEditor.html");
 		}
-		else if (isFA == "pad")
+		else if (graphType == "pad")
 		{
 			window.open("../ui/NPDAEditor.html");
 		}
 		else{
 			//OpenDSA/AV/Development/formal_language/TMEditor.html
-			window.open();
+			window.open("../../../Development/formal_language/TMEditor.html");
 		}
 
 	}
@@ -179,7 +180,7 @@
 		var uploadButton = $(this);
 		var problemIndex = uploadButton.parent().index();
 		//let FAEditor know we are editing graphs for exercises so we don't need certain functions.
-		localStorage['createExercise'] = true;
+		//localStorage['createExercise'] = true;
 		localStorage['exerciseIndex'] = problemIndex;
 		// console.log('PROBLEM INDEX: ' + problemIndex);
 
@@ -276,7 +277,7 @@
 			var problemIndex = uploadButton.parent().index();
 			// console.log('problem index: ' + localStorage['exerciseIndex']);
 			localStorage['problem' + localStorage['exerciseIndex']] = resultJson;
-		}
+		};
 		reader.readAsText(file);
 		alert('Graph loaded!');
 	}
@@ -320,13 +321,13 @@
 	{
 		if ($(this).val() == 'pda')
 		{
-			isFA = "pad";
+			graphType = "pad";
 		}
 		else if ($(this).val() == 'fa'){
-			isFA = "fa";
+			graphType = "fa";
 		}
 		else{
-			isFa = "tm"
+			graphType = "tm"
 		}
 	});
 
