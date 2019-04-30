@@ -3,7 +3,6 @@ var ExerciseController = function (jsav, fa, filePath, dataType, options, check)
 };
 var controllerProto = ExerciseController.prototype;
 var logRecord = new Object();
-logRecord['HighestScore'] = 0;
 var tryC = 0;
 controllerProto.init = function (jsav, fa, filePath, dataType, options, check) {
 	if (check) {
@@ -47,6 +46,9 @@ controllerProto.load = function (check) {
 	$('.links').click(function() {
 		proto.toExercise(this);
 	});
+	$('#showResult').click(function () {
+		alert(JSON.stringify(logRecord));
+	});
 	$("#testResults").hide();
 	this.updateExercise(this.currentExercise);
 }
@@ -60,27 +62,32 @@ controllerProto.startTesting = function() {
 	$("#testResults").empty();
 	$("#testResults").append("<tr><td>Test Case</td><td>Standard Result</td><td>Your Result</td></tr>");
 	var count = 0;
+	var testRes = [];
 	for (i = 0; i < this.testCases.length; i++) {
+		var testNum = i + 1;
 		var testCase = this.testCases[i];
 		var input = Object.keys(testCase)[0];
 		var inputResult = willReject(this.fa, input);
 		if (inputResult !== testCase[input]) {
 			$("#testResults").append("<tr><td>" + input + "</td><td>" + (testCase[input] ? "Accept" : "Reject") + "</td><td class='correct'>" + (inputResult ? "Reject": "Accept") + "</td></tr>");
 			count++;
+			testRes.push('Test' + testNum +':' + 'Correct');
 		}
 		else {
 			$("#testResults").append("<tr><td>" + input + "</td><td>" + (testCase[input] ? "Accept" : "Reject") + "</td><td class='wrong'>" + (inputResult ? "Reject": "Accept") + "</td></tr>");
+			testRes.push('Test' + testNum + ':' + 'Wrong');
 		}
 	}
 	var exer = {};
-	exer['Attempt' + tryC.toString()] = count + " / " + this.testCases.length;
-	var num = (this.currentExercise).toString();
-	logRecord['Exercise' + (num + 1).toString()] = exer;
-	if (count > logRecord['HighestScore']) {
-		logRecord['HighestScore'] = count;
+	exer['Attempt' + tryC.toString()] = testRes;
+	var exNum = parseInt(this.currentExercise) + 1;
+	if (count > logRecord['Exercise' + exNum +'_Highest']) {
+	 	logRecord['Exercise' + exNum +'_Highest'] = count;
 	}
-	alert(JSON.stringify(logRecord));
-	//alert(this.currentExercise);
+	logRecord['Exercise' + exNum].push(exer);
+	var end = new Date;
+	logRecord['Exercise' + exNum + '_Time'].push(end);
+
 	$("#percentage").text("Correct cases: " + count + " / " + this.testCases.length);
 	$("#percentage").show();
 	$("#testResults").show();
@@ -120,4 +127,14 @@ controllerProto.updateExercise = function(id) {
 	}
 	$("#testResults").hide();
 	$("#percentage").hide();
+	var exNum = parseInt(this.currentExercise) + 1;
+	logRecord['Exercise' + exNum] = [];
+	var high = 0;
+	// Object.defineProperty(high, 'Highest', {value: 0, writable:true});
+	logRecord['Exercise' + exNum + '_Highest'] = [];
+	logRecord['Exercise' + exNum + '_Highest'].push(high);
+	var start = new Date();
+	logRecord['Exercise' + exNum + '_Time'] = [];
+	logRecord['Exercise' + exNum + '_Time'].push(start);
+
 };
